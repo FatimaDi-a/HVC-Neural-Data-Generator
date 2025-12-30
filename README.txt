@@ -5,10 +5,12 @@ This repository provides a reproducible generator of synthetic HVC neural
 population activity, including RA-projecting neurons, X-projecting neurons,
 and interneurons.
 
-The tool outputs:
-- Binary and processed neural activity matrices
-- Raster plot figures
-- Reproducible `.npz` datasets
+The tool outputs binary and processed neural activity matrices
+
+Raster plots for data can be obtained upon request (Note that this is slow):
+from hvc_generator.visualize import plot_all
+
+plot_all(data)
 
 ## Installation
 
