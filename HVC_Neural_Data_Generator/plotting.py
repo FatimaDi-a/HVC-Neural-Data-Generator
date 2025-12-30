@@ -1,22 +1,34 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_neuron_raster(data, title, color, filename):
+def plot_neuron_raster(data, title, color,save=True, filename=None):
     plt.figure(figsize=(18, 12))
 
-    for t in range(data.shape[1]):
-        for n in range(data.shape[0]):
-            if data[n, t] != 0:
-                plt.scatter(t, data.shape[0] - n, color=color, marker='|', s=15)
+    neurons, times = np.where(data != 0)
 
-    plt.title(title, fontsize=14)
+    plt.scatter(
+        times,
+        neurons,
+        color = color,
+        marker="|",
+        s=10,
+        linewidths=1
+    )
+
+    plt.gca().invert_yaxis()
+
+    plt.title(f"{title} Raster Plot", fontsize=14)
     plt.xlabel("Time (ms)")
     plt.ylabel("Neuron")
-    plt.xlim(-1, data.shape[1])
 
-    plt.savefig(filename + ".png", dpi=600, bbox_inches="tight")
-    plt.savefig(filename + ".pdf", dpi=300, bbox_inches="tight")
-    plt.close()
+    if save:
+        if filename is None:
+            filename = f"{title.replace(' ', '_')}_raster.png"
+
+        plt.savefig(filename, dpi=600, bbox_inches="tight")
+        plt.savefig(filename.replace(".png", ".pdf"), bbox_inches="tight")
+
+    plt.show()
 
 def sort_neurons_by_bursts(data):
     burst_order = []
