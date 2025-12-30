@@ -99,24 +99,6 @@ def generate_X(dim, time, min_bursts=2, max_bursts=4, min_gap=6):
     return X_data1
 
 
-def preprocessing_data(Ra, X, INT, alpha):
-    time = Ra.shape[1]
-
-    def process(mat):
-        mat = mat.astype(float).copy()
-        for i in range(mat.shape[0]):
-            onsets = np.where((mat[i, 1:] == 1) & (mat[i, :-1] == 0))[0] + 1
-            if mat[i, 0] == 1:
-                onsets = np.insert(onsets, 0, 0)
-
-            for idx in onsets:
-                mat[i, idx] = 1.01
-                for k in range(1, 5):
-                    if idx + k < time and mat[i, idx + k] != 0:
-                        mat[i, idx + k] += exp(-alpha * k)
-        return mat
-
-    return process(Ra), process(X), process(INT)
 
 class GeneratorConfig:
     def __init__(self, time=500, dim=247, RAdim=495, nbr_gaps=20, alpha=0.5):
@@ -139,19 +121,13 @@ class DataGenerator:
         INT = create_interneuron_dataset(
             self.config.dim, self.config.time, self.config.nbr_gaps
         )
-
-        Ra_p, X_p, INT_p = preprocessing_data(
-            Ra, X, INT, self.config.alpha
-        )
-
         return {
-            "Ra": Ra,
-            "X": X,
-            "interneurons": INT,
-            "Ra_processed": Ra_p,
-            "X_processed": X_p,
-            "interneurons_processed": INT_p,
-        }
+        "Ra": Ra,
+        "X": X,
+        "interneurons": INT
+    }
+
+
 
     def run_and_save(self, outdir="results"):
         os.makedirs(outdir, exist_ok=True)
@@ -161,7 +137,7 @@ class DataGenerator:
         np.savez(os.path.join(outdir, "data.npz"), **data)
 
         plot_neuron_raster(
-            data["Ra_processed"],
+            data["Ra"],
             "HVC_RA Neuron Burst",
             "#bc272d",
             os.path.join(outdir, "RA_raster"),
