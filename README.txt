@@ -23,7 +23,7 @@ pip install -e .
 
 If you use this tool, please cite:
 
-Fatima Di-a, **HVC Neural Data Generator v1.0.1**, Zenodo, DOI: [10.5281/zenodo.18087314](https://doi.org/10.5281/zenodo.18087314)
+Fatima Di-a, **HVC Neural Data Generator v1.0.0**, Zenodo, DOI: [10.5281/zenodo.18087314](https://doi.org/10.5281/zenodo.18096719)
 <<<<<<< Updated upstream
 
 =======
